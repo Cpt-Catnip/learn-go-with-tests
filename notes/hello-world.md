@@ -58,3 +58,45 @@ FAIL	hello	0.507s
   * test functions need to start with the word `Test`
   * the test function only takes one argument `t *testing.T`
   * need to `import "testing"` to using `*testing.T`
+
+* we added the ability to pass in a name argument, but we can refactor the return statement to use a `constant`!
+	* woo I haven't used these yet!
+
+```go
+const englishHelloPrefix = "Hello, "
+
+func Hello(n string) string {
+	return englishHelloPrefix + n
+}
+```
+
+* using constants improves performance
+	* very negligible in this example, but you get the idea
+* Now introducing default arguments
+* First the test, though
+
+```go
+func TestHello(t *testing.T) {
+	assertCorrectMessage := func(t testing.TB, got, want string) {
+		t.Helper()
+		if got != want {
+			t.Errorf("got %q want %q", got, want)
+		}
+	}
+
+	t.Run("saying hello to people", func(t *testing.T) {
+		got := Hello("Chris")
+		want := "Hello, Chris"
+		assertCorrectMessage(t, got, want)
+	})
+	t.Run("Say 'Hello, World' when an empty string is supplied", func(t *testing.T) {
+		got := Hello("")
+		want := "Hello, World"
+		assertCorrectMessage(t, got, want)
+	})
+}
+```
+
+* Look, subtests!
+* Note that we also refactored re-used logic in the test; refactoring isn't just for prod code
+* `testing.TB` is an interface that both `*testing.T` and `*testing.B` satisfy
