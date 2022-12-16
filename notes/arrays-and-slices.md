@@ -51,4 +51,21 @@ ok      hello/arrays    0.109s
 
 ## Sum All Tails
 * Now we want a function that does the same thing as `SumAll` except that it ignores the first element of each slice
-* 
+* Slice syntax!
+* `slice[low:high]`
+* What happens with empty slices??
+* Write a test about it!
+* Yep we get an out-of-bounds error. That makes sense.
+* Just check the length of `numbers` :^|
+* Yay now we're refactoring our test to reuse that check function!
+```go
+checkSums := func(t testing.TB, got, want []int) {
+    t.Helper()
+    if !reflect.DeepEqual(got, want) {
+        t.Errorf("got %v want %v", got, want)
+    }
+}
+```
+* Now we can use that anywhere in the test we want to do that check!
+  * I should look up the docs on `t.Helper()` and `testing.TB`
+* `checkSums` is also type-safe, so we don't have to worry about `DeepEqual` anymore
